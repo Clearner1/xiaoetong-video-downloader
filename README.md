@@ -28,7 +28,7 @@ npm start
 
 ## Usage
 1. Open the video page in your browser.
-2. Get `userId` in DevTools Console (type `userId` and press Enter).
+2. Get `userId` in DevTools Console (type `pushData` and read `payload.userId`).
 3. In DevTools > Network, copy the full `m3u8` request URL.
 4. Copy the page URL as `referer`.
 5. (Optional) If the m3u8 segment lines do not include query parameters, copy any `.ts` request URL as `tsUrlDemo`.
@@ -73,7 +73,7 @@ npm start
 
 ## 使用步骤
 1. 打开视频播放页。
-2. 在 DevTools Console 输入 `userId` 获取用户 id。
+2. 在 DevTools Console 输入 `pushData`，从 `payload.userId` 获取用户 id。
 3. 在 DevTools > Network 中找到 `.m3u8` 请求，复制完整 URL。
 4. 将页面地址作为 `referer`。
 5. （可选）如果 m3u8 的 ts 行没有参数，复制任意 `.ts` 请求 URL 作为 `tsUrlDemo`。
