@@ -1,4 +1,4 @@
-# Xiaoetong Downloader (Electron)
+# xiaoetong-video-downloader
 
 English | [中文](#中文说明)
 
@@ -89,4 +89,3 @@ npm start
 
 ## 致谢
 感谢 https://github.com/li1055107552/xiaoe-tech-decodeDemo 本项目基于该仓库的思路进行优化。
-# xiaoetong-video-downloader

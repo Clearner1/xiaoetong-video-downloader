@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xiaoetong Downloader</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="backdrop">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="grid-lines"></div>
+    </div>
+
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">One-click workflow</p>
+          <h1>Xiaoetong Downloader</h1>
+          <p class="subhead">
+            Paste your parameters, download segments, and auto-merge with ffmpeg.
+          </p>
+        </div>
+        <div class="status-card">
+          <div class="status-label">Status</div>
+          <div id="statusText" class="status-value">Idle</div>
+          <div class="status-meta" id="progressText">0 / 0</div>
+          <div class="progress-track">
+            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Inputs</h2>
+          <label class="field">
+            <span>userId</span>
+            <input id="userId" placeholder="u_xxx" />
+          </label>
+
+          <label class="field">
+            <span>m3u8Url</span>
+            <textarea id="m3u8Url" rows="2" placeholder="https://...m3u8"></textarea>
+          </label>
+
+          <label class="field">
+            <div class="field-header">
+              <span>tsUrlDemo</span>
+              <span class="tag">Optional</span>
+            </div>
+            <textarea
+              id="tsUrlDemo"
+              rows="2"
+              placeholder="https://...ts?sign=...&t=...&us=...&whref=..."
+            ></textarea>
+            <p class="hint">
+              Only needed when ts lines in the m3u8 do not include query parameters.
+            </p>
+          </label>
+
+          <label class="field">
+            <span>referer</span>
+            <input id="referer" placeholder="https://..." />
+          </label>
+        </div>
+
+        <div class="card">
+          <h2>Output</h2>
+          <label class="field">
+            <span>Output root</span>
+            <div class="row">
+              <input id="outputRoot" placeholder="Select a folder" />
+              <button id="browseBtn" class="btn ghost" type="button">Browse</button>
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Output folder name</span>
+            <input id="outputFolder" placeholder="video-id" />
+          </label>
+
+          <div class="actions">
+            <button id="startBtn" class="btn primary">Start</button>
+            <button id="cancelBtn" class="btn ghost" disabled>Cancel</button>
+          </div>
+
+          <div class="note">
+            Output will be <span id="outputPreview">...</span>
+          </div>
+        </div>
+
+        <div class="card log">
+          <div class="log-header">
+            <h2>Logs</h2>
+            <button id="clearLogBtn" class="btn ghost small" type="button">Clear</button>
+          </div>
+          <pre id="logOutput"></pre>
+        </div>
+      </section>
+    </main>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

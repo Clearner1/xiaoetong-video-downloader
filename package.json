@@ -1,0 +1,9 @@
+{
+  "name": "xiaoe-tech-downloader",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "start": "npx -y electron ."
+  }
+}
