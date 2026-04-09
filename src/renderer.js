@@ -14,6 +14,17 @@ const els = {
   progressText: document.getElementById('progressText'),
   progressBar: document.getElementById('progressBar'),
   batchProgress: document.getElementById('batchProgress'),
+  // Login elements
+  loginBtn: document.getElementById('loginBtn'),
+  clearLoginBtn: document.getElementById('clearLoginBtn'),
+  loginStatus: document.getElementById('loginStatus'),
+  // Parse elements
+  courseUrlInput: document.getElementById('courseUrlInput'),
+  parseBtn: document.getElementById('parseBtn'),
+  parseStatus: document.getElementById('parseStatus'),
+  parseProgressBar: document.getElementById('parseProgressBar'),
+  parseStatusText: document.getElementById('parseStatusText'),
+  parseLogOutput: document.getElementById('parseLogOutput'),
 };
 
 let isBatchMode = false;
@@ -143,6 +154,131 @@ function lockForm(isLocked) {
   els.startBtn.disabled = isLocked;
   els.cancelBtn.disabled = !isLocked;
 }
+
+// ─── Login Logic ───
+
+function setLoginStatus(status) {
+  const statusEl = els.loginStatus;
+  if (!statusEl) return;
+  statusEl.className = `login-status login-status-${status}`;
+  const textEl = statusEl.querySelector('.login-status-text');
+  const labels = {
+    none: '未登录',
+    pending: '登录中...',
+    ok: '已登录 ✓',
+  };
+  if (textEl) textEl.textContent = labels[status] || status;
+}
+
+els.loginBtn.addEventListener('click', async () => {
+  const courseUrl = els.courseUrlInput.value.trim();
+  if (!courseUrl) {
+    appendParseLog('⚠ 请先输入课程链接再登录。');
+    els.parseLogOutput.style.display = 'block';
+    return;
+  }
+
+  // Validate URL format
+  try {
+    new URL(courseUrl);
+  } catch (e) {
+    appendParseLog('⚠ 课程链接格式不正确，请输入完整的 URL。');
+    els.parseLogOutput.style.display = 'block';
+    return;
+  }
+
+  els.loginBtn.disabled = true;
+  setLoginStatus('pending');
+  appendParseLog('正在打开登录页面...');
+
+  try {
+    const result = await window.api.xiaoeLogin({ courseUrl });
+    if (result.ok) {
+      appendParseLog('✅ ' + result.message);
+    } else {
+      appendParseLog('⚠ ' + (result.error || '登录未完成'));
+    }
+  } catch (err) {
+    appendParseLog('❌ 登录窗口异常: ' + err.message);
+    setLoginStatus('none');
+  } finally {
+    els.loginBtn.disabled = false;
+  }
+});
+
+els.clearLoginBtn.addEventListener('click', async () => {
+  els.clearLoginBtn.disabled = true;
+  try {
+    await window.api.clearXiaoeLogin();
+    appendParseLog('✅ 已清除登录状态，请重新登录。');
+  } catch (err) {
+    appendParseLog('❌ 清除失败: ' + err.message);
+  } finally {
+    els.clearLoginBtn.disabled = false;
+  }
+});
+
+// ─── Parse Course Logic ───
+
+function appendParseLog(message) {
+  if (!message) return;
+  els.parseLogOutput.style.display = 'block';
+  const line = `${new Date().toLocaleTimeString()}  ${message}\n`;
+  els.parseLogOutput.textContent += line;
+  els.parseLogOutput.scrollTop = els.parseLogOutput.scrollHeight;
+}
+
+els.parseBtn.addEventListener('click', async () => {
+  const courseUrl = els.courseUrlInput.value.trim();
+  if (!courseUrl) {
+    appendParseLog('请输入课程链接。');
+    return;
+  }
+
+  // Reset UI
+  els.parseLogOutput.textContent = '';
+  els.parseLogOutput.style.display = 'block';
+  els.parseStatus.style.display = 'block';
+  els.parseProgressBar.style.width = '0%';
+  els.parseStatusText.textContent = '解析中...';
+  els.parseBtn.disabled = true;
+  els.courseUrlInput.disabled = true;
+
+  appendParseLog(`开始解析: ${courseUrl}`);
+
+  try {
+    const result = await window.api.parseCourse({ courseUrl });
+
+    if (result.ok && result.results && result.results.length > 0) {
+      // Clear existing rows
+      els.batchTableBody.innerHTML = '';
+      rowCounter = 0;
+
+      // Fill the table with parsed results
+      result.results.forEach((item) => {
+        addRow(item.title || '', item.m3u8_url || '');
+      });
+
+      // Auto-fill referer from course URL
+      if (!els.referer.value.trim()) {
+        els.referer.value = courseUrl;
+      }
+
+      els.parseStatusText.textContent = `解析完成! 已填入 ${result.results.length} 条视频`;
+      els.parseProgressBar.style.width = '100%';
+      appendParseLog(`✅ 已将 ${result.results.length} 条 m3u8 地址自动填入下方下载表格！`);
+    } else {
+      els.parseStatusText.textContent = '解析失败';
+      appendParseLog(`❌ 解析失败: ${result.error || '未知错误'}`);
+    }
+  } catch (err) {
+    els.parseStatusText.textContent = '解析出错';
+    appendParseLog(`❌ 异常: ${err.message}`);
+  } finally {
+    els.parseBtn.disabled = false;
+    els.courseUrlInput.disabled = false;
+  }
+});
 
 // ─── Init ───
 
@@ -296,6 +432,27 @@ window.api.onBatchDone((data) => {
   setStatus('All Done');
   els.batchProgress.textContent = '';
   lockForm(false);
+});
+
+// ─── Login IPC Listener ───
+
+window.api.onLoginStatus((status) => setLoginStatus(status));
+
+// ─── Parse IPC Listeners ───
+
+window.api.onParseLog((msg) => appendParseLog(msg));
+
+window.api.onParseProgress((data) => {
+  const pct = data.total > 0 ? Math.round((data.current / data.total) * 100) : 0;
+  els.parseProgressBar.style.width = `${pct}%`;
+  els.parseStatusText.textContent = `解析进度: ${data.current}/${data.total}`;
+});
+
+window.api.onParseUserId((uid) => {
+  if (uid && !els.userId.value.trim()) {
+    els.userId.value = uid;
+    appendParseLog(`已自动填入 userId: ${uid}`);
+  }
 });
 
 init();

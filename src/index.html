@@ -39,6 +39,53 @@
     </header>
 
     <section class="grid">
+      <!-- Auto Parse Card -->
+      <div class="card parse-card">
+        <h2>🔍 智能解析课程</h2>
+        <p class="parse-desc">粘贴小鹅通课程/专栏链接，先登录后自动获取全部 m3u8 地址并填入下方表格。</p>
+
+        <!-- Step 1: 登录 -->
+        <div class="parse-step">
+          <div class="parse-step-header">
+            <span class="parse-step-badge">1</span>
+            <span class="parse-step-title">登录小鹅通</span>
+            <span id="loginStatus" class="login-status login-status-none">
+              <span class="login-dot"></span>
+              <span class="login-status-text">未登录</span>
+            </span>
+            <button id="clearLoginBtn" class="btn ghost small clear-login-btn" type="button">清除登录</button>
+          </div>
+          <p class="parse-step-desc">先粘贴课程链接，然后点击登录按钮，在弹出的窗口中完成登录。</p>
+          <div class="row">
+            <input id="courseUrlInput" placeholder="https://xxx.h5.xet.citv.cn/p/course/column/..." />
+            <button id="loginBtn" class="btn login-btn" type="button">
+              <span class="login-btn-icon">🔐</span> 登录
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: 解析 -->
+        <div class="parse-step">
+          <div class="parse-step-header">
+            <span class="parse-step-badge">2</span>
+            <span class="parse-step-title">解析课程</span>
+          </div>
+          <p class="parse-step-desc">登录成功后，点击下方按钮自动解析所有视频地址。</p>
+          <div class="row">
+            <button id="parseBtn" class="btn accent" type="button">🚀 开始解析</button>
+          </div>
+        </div>
+
+        <div id="parseStatus" class="parse-status" style="display:none;">
+          <div class="parse-progress-track">
+            <div id="parseProgressBar" class="parse-progress-bar" style="width:0%"></div>
+          </div>
+          <div id="parseStatusText" class="parse-status-text">等待中...</div>
+        </div>
+
+        <pre id="parseLogOutput" class="parse-log" style="display:none;"></pre>
+      </div>
+
       <!-- Common params -->
       <div class="card">
         <h2>Common Params</h2>

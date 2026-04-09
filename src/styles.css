@@ -495,6 +495,195 @@ pre {
   }
 }
 
+/* ── Parse Card ── */
+
+.parse-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #ffffff, #f0fafb);
+  border: 1.5px solid rgba(15, 139, 141, 0.25);
+}
+
+.parse-card h2 {
+  margin-bottom: 4px;
+}
+
+.parse-desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.btn.accent {
+  background: linear-gradient(120deg, var(--accent-warm), #e55a00);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(242, 143, 59, 0.3);
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.btn.accent:not(:disabled):hover {
+  box-shadow: 0 12px 24px rgba(242, 143, 59, 0.4);
+}
+
+.parse-status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.parse-progress-track {
+  height: 6px;
+  background: rgba(15, 139, 141, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.parse-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+  border-radius: inherit;
+  transition: width 0.4s ease;
+}
+
+.parse-status-text {
+  font-size: 12px;
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.parse-log {
+  height: 140px;
+  font-size: 11px;
+}
+
+/* ── Parse Steps ── */
+
+.parse-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(15, 139, 141, 0.04);
+  border: 1px solid rgba(15, 139, 141, 0.1);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.parse-step:hover {
+  border-color: rgba(15, 139, 141, 0.2);
+  background: rgba(15, 139, 141, 0.07);
+}
+
+.parse-step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.parse-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.parse-step-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.parse-step-desc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  padding-left: 36px;
+}
+
+/* ── Login Button ── */
+
+.btn.login-btn {
+  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.3);
+  white-space: nowrap;
+  min-width: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.btn.login-btn:not(:disabled):hover {
+  box-shadow: 0 12px 24px rgba(99, 102, 241, 0.45);
+  background: linear-gradient(120deg, #818cf8, #a78bfa);
+}
+
+.login-btn-icon {
+  font-size: 15px;
+}
+
+/* ── Login Status ── */
+
+.login-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 999px;
+  margin-left: auto;
+  transition: all 0.3s ease;
+}
+
+.login-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background 0.3s ease;
+}
+
+.login-status-none {
+  background: rgba(94, 106, 114, 0.1);
+  color: var(--muted);
+}
+
+.login-status-none .login-dot {
+  background: var(--muted);
+  opacity: 0.5;
+}
+
+.login-status-pending {
+  background: rgba(242, 143, 59, 0.12);
+  color: #d97706;
+}
+
+.login-status-pending .login-dot {
+  background: #f59e0b;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.login-status-ok {
+  background: rgba(34, 160, 80, 0.12);
+  color: #16a34a;
+}
+
+.login-status-ok .login-dot {
+  background: #22c55e;
+}
+
 @media (max-width: 720px) {
   .app {
     padding: 24px;
