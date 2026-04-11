@@ -73,6 +73,27 @@ https://github.com/user-attachments/assets/4d3ddf00-6bda-4812-a4b0-ddc0f65cc5f5
 - **输出目录**：每个视频会在您选定的 Output root 下，自动创建一个与课程同名的文件夹，最后的 MP4 也会保存在其中。
 - **状态管理**：如果需要切换小鹅通账号，可以点击登录状态旁边的"清除登录"按钮。
 
+## ☕ 赞助支持 (Buy me a coffee)
+
+如果您觉得这个工具极大地节省了您的时间，或者对您很有帮助，欢迎打赏支持，您的支持是我继续维护的动力！
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <strong>微信支付</strong><br>
+        <img src="https://raw.githubusercontent.com/Clearner1/xiaoetong-video-downloader/main/assets/weixinpay.png" width="250"/>
+      </td>
+      <td align="center">
+        <strong>支付宝</strong><br>
+        <img src="https://raw.githubusercontent.com/Clearner1/xiaoetong-video-downloader/main/assets/alipay.jpg" width="250"/>
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
 ## ⚠️ 合规与免责声明
 
 本项目仅供个人技术研究和学习使用，请勿用于任何商业用途。使用本工具下载内容前提是：**您必须已经合法拥有或被授权访问该内容**。因滥用本工具造成的任何版权纠纷，由使用者自行承担责任。
