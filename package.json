@@ -2,8 +2,48 @@
   "name": "xiaoe-tech-downloader",
   "version": "0.1.0",
   "private": true,
+  "description": "小鹅通视频全自动下载器 - 支持批量解析、M3U8下载、加密视频解密与合并 (Xiaoetong Video Downloader)",
+  "author": "Clearner1",
+  "keywords": [
+    "xiaoetong",
+    "video-downloader",
+    "m3u8",
+    "crawler",
+    "drm-decryption",
+    "ffmpeg",
+    "electron",
+    "batch-download",
+    "小鹅通下载器",
+    "知识付费抓取"
+  ],
   "main": "src/main.js",
   "scripts": {
-    "start": "npx -y electron ."
+    "start": "npx -y electron .",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.clearner1.xiaoedownloader",
+    "productName": "小鹅通视频下载器",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "^41.2.0",
+    "electron-builder": "^26.8.1"
   }
 }

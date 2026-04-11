@@ -1,6 +1,14 @@
-# 小鹅通视频下载器 (Xiaoetong Video Downloader)
+# 小鹅通视频全自动下载器 (Xiaoetong Video Downloader)
 
-这是一个全自动的桌面工具，专为批量下载并合并你已授权访问的小鹅通视频/专栏而设计。程序会自动帮你抓取课程里所有的视频地址，并完成下载、解密以及使用 ffmpeg 拼接成完整的 MP4 文件。
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Electron](https://img.shields.io/badge/Electron-Desktop_App-47848f?logo=electron)
+![FFmpeg](https://img.shields.io/badge/FFmpeg-Video_Process-007808?logo=ffmpeg)
+
+> **🚀 一款基于 Electron 打造的全自动小鹅通（Xiaoetong）视频、专栏批量解析与下载工具。**支持视频 M3U8 抓取、AES-128/XOR 解密、FFmpeg 自动合并为 MP4，为您提供极致流畅的知识付费视频下载体验。
+> 
+> A fully automated web scraper and video downloader for Xiaoetong courses, featuring M3U8 batch downloading, DRM decryption, and auto-merging via FFmpeg.
+
+这是一个全自动的桌面工具，专为批量下载并合并你已授权访问的小鹅通视频/专栏而设计。程序会自动帮你嗅探课程里所有的 M3U8 视频真实地址，并完成资源下载、密钥解密以及使用 ffmpeg 拼接成完整的、可在本地播放的 MP4 文件。
 
 ## 🎯 核心特色
 
