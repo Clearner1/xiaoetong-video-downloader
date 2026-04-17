@@ -11,7 +11,7 @@
 这是一个全自动的桌面工具，专为批量下载并合并你已授权访问的小鹅通视频/专栏而设计。程序会自动帮你嗅探课程里所有的 M3U8 视频真实地址，并完成资源下载、密钥解密以及使用 ffmpeg 拼接成完整的、可在本地播放的 MP4 文件。
 
 
-## 🛠 环境要求
+##  环境要求
 
 - **Node.js**: 18+ 及 npm
 - **ffmpeg**: 必须安装并在系统的环境变量 `PATH` 中配置好
@@ -63,7 +63,7 @@ https://github.com/user-attachments/assets/4d3ddf00-6bda-4812-a4b0-ddc0f65cc5f5
 
 手动抓包操作演示：
 
-<video src="./assets/手动抓包模式.mp4" controls="controls" width="100%"></video>
+https://github.com/user-attachments/assets/3c0af638-052e-4dce-9736-73a393697d71
 
 小鹅通允许部分商家深度定制店铺主页（链接常带有 `decorate/homepage` 等字样）。针对这类非标准界面的视频，自动化爬虫不一定能探测出播放列表，因此你需要通过**抓包的方式逐一手动下载**：
 
