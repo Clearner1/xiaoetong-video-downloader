@@ -5,6 +5,15 @@ const http = require('http');
 const https = require('https');
 const path = require('path');
 const { spawn } = require('child_process');
+const ffmpegStaticPath = require('ffmpeg-static');
+
+function getFfmpegPath() {
+  // In packaged Electron apps, asar-unpacked binaries live under app.asar.unpacked/
+  const unpackedPath = ffmpegStaticPath.replace('app.asar', 'app.asar.unpacked');
+  if (fs.existsSync(unpackedPath)) return unpackedPath;
+  if (fs.existsSync(ffmpegStaticPath)) return ffmpegStaticPath;
+  return 'ffmpeg'; // fallback to system PATH
+}
 
 function buildDefaultHeaders(referer) {
   const headers = {
@@ -299,7 +308,7 @@ function pickBetterCandidate(a, b) {
 
 function checkFfmpegAvailable() {
   return new Promise((resolve, reject) => {
-    const proc = spawn('ffmpeg', ['-version'], { stdio: 'ignore' });
+    const proc = spawn(getFfmpegPath(), ['-version'], { stdio: 'ignore' });
     proc.on('error', (err) => reject(err));
     proc.on('close', (code) => {
       if (code === 0) resolve();
@@ -312,7 +321,7 @@ async function mergeSegments(decodeDir, outputFile, onLog, signal) {
   throwIfAborted(signal);
   return new Promise((resolve, reject) => {
     const proc = spawn(
-      'ffmpeg',
+      getFfmpegPath(),
       [
         '-y', '-safe', '0',
         '-f', 'concat',
