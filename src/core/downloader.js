@@ -175,7 +175,7 @@ function getIV(m3u8Content) {
 function getKeyUri(m3u8Content, m3u8Url) {
   const match = m3u8Content.match(/#EXT-X-KEY:.*?\bURI="(.*?)"/);
   if (!match) {
-    throw new Error('EXT-X-KEY not found in m3u8.');
+    return null;
   }
   const keyUri = match[1];
   return new URL(keyUri, m3u8Url).toString();
@@ -209,16 +209,16 @@ function parseTsUrls(m3u8Content, m3u8Url) {
   if (lines.length === 0) {
     throw new Error('No segment lines found in m3u8.');
   }
-  
+
   // Extract the raw query string from the m3u8 URL (preserving original encoding).
   // IMPORTANT: we must NOT use URLSearchParams.toString() because it re-encodes
   // characters like commas (,) → %2C, which breaks server-side signature validation.
   const baseUrlObj = new URL(m3u8Url);
   const baseRawQuery = baseUrlObj.search; // e.g. "?sign=xxx&t=xxx&whref=*.xiaoe-tech.com,*.xiaoeknow.com"
-  
+
   return lines.map((line) => {
     const resolved = new URL(line, m3u8Url);
-    
+
     if (resolved.search) {
       // The TS line already has its own query params — keep them as-is,
       // then append any missing params from the m3u8 URL using raw strings.
@@ -391,9 +391,9 @@ class DownloadJob extends EventEmitter {
         const whref = u.searchParams.get('whref');
         if (whref) {
           // Find a valid domain wildcard, e.g. '*.xiaoe-tech.com'
-          const firstAllowed = whref.split(',')[0]; 
+          const firstAllowed = whref.split(',')[0];
           // Inject 'app.' instead of '*.' to craft a perfectly valid bypass referer
-          opts.referer = `https://${firstAllowed.replace('*.', 'app.')}/`; 
+          opts.referer = `https://${firstAllowed.replace('*.', 'app.')}/`;
         }
       } catch (e) {
         // Ignore parsing errors, it will just proceed without referer
@@ -431,6 +431,7 @@ class DownloadJob extends EventEmitter {
     let keyMode = 'xor';
 
     const refreshKey = async () => {
+      if (!keyUrl) return;
       this.emit('log', 'Refreshing key...');
       rawKey = await fetchKey(keyUrl, opts.userId, headers, this.signal);
       xorKey = xorKeys(rawKey, opts.userId);
@@ -453,6 +454,17 @@ class DownloadJob extends EventEmitter {
       await downloadToFile(url, rawPath, headers, this.signal);
 
       const tryDecrypt = (mode) => {
+        if (!keyUrl) {
+          try {
+            const data = fs.readFileSync(rawPath);
+            const normalized = normalizeTs(data);
+            if (!normalized) return null;
+            return { mode: 'none', buffer: normalized.buffer, score: normalized.score };
+          } catch (err) {
+            return null;
+          }
+        }
+
         const key = mode === 'xor' ? xorKey : rawKey;
         if (!key) return null;
         try {
@@ -465,23 +477,28 @@ class DownloadJob extends EventEmitter {
         }
       };
 
-      let candidate = pickBetterCandidate(
-        tryDecrypt(keyMode),
-        tryDecrypt(keyMode === 'xor' ? 'raw' : 'xor')
-      );
+      let candidate;
+      if (!keyUrl) {
+        candidate = tryDecrypt('none');
+      } else {
+        candidate = pickBetterCandidate(
+          tryDecrypt(keyMode),
+          tryDecrypt(keyMode === 'xor' ? 'raw' : 'xor')
+        );
 
-      if (!candidate) {
-        await refreshKey();
-        candidate = pickBetterCandidate(tryDecrypt('xor'), tryDecrypt('raw'));
+        if (!candidate) {
+          await refreshKey();
+          candidate = pickBetterCandidate(tryDecrypt('xor'), tryDecrypt('raw'));
+        }
+
+        if (!candidate) {
+          await refreshKey();
+          candidate = pickBetterCandidate(tryDecrypt('xor'), tryDecrypt('raw'));
+        }
       }
 
       if (!candidate) {
-        await refreshKey();
-        candidate = pickBetterCandidate(tryDecrypt('xor'), tryDecrypt('raw'));
-      }
-
-      if (!candidate) {
-        throw new Error(`Failed to decrypt segment ${i}.`);
+        throw new Error(`Failed to process segment ${i}.`);
       }
 
       keyMode = candidate.mode;
